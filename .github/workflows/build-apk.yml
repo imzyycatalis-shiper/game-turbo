@@ -26,6 +26,11 @@ jobs:
           PROJ=$(dirname "$(find extracted -name settings.gradle | head -1)")
           echo "PROJ=$PROJ" >> "$GITHUB_ENV"
 
+      - name: Fix missing import
+        run: |
+          F="$PROJ/app/src/main/java/com/imzyyknox/gameturbo/FloatingService.java"
+          sed -i '/^package /a import android.provider.Settings;' "$F"
+
       - name: Build debug APK
         working-directory: ${{ env.PROJ }}
         run: gradle assembleDebug --stacktrace
